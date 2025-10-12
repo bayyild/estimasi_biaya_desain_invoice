@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#333333">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Estimasi Biaya Desain</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- Favicon Bulat Kuning (kembali) -->
+<link rel="icon" href="data:image/svg+xml,
+  %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E
+  %3Ccircle cx='50' cy='50' r='50' fill='%23FECB10'/%3E
+  %3C/svg%3E" type="image/svg+xml" />
+
+<style>
+/* ---- Styles (sama persis seperti file Anda sebelumnya) ---- */
+body { font-family:'Poppins',sans-serif; margin:20px; background:#FECB10; color:#333; }
+.header-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;}
+h2{margin:0;}
+.title-wrapper { display:inline-block; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.25); }
+.title-small { display:block; font-size:16px; font-weight:500; color:#fff; background:#333; padding:4px 12px 2px; text-align:center; }
+.title-big { display:block; font-size:26px; font-weight:700; color:#333; background:#fff; padding:4px 14px 8px; text-align:center; letter-spacing:1px; }
+.project-inputs{min-width:260px;}
+.project-inputs label{display:block;font-size:13px;color:#222;margin-bottom:4px;}
+.project-inputs input{margin-bottom:8px;}
+.grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; margin-bottom:20px; }
+.service-btn{ padding:16px; border:2px solid #fff; border-radius:12px; background:#FECB10; color:#333; cursor:pointer; text-align:center; font-size:15px; font-weight:500; transition:all .3s ease; box-shadow:0 2px 6px rgba(0,0,0,.1); }
+.service-btn:hover{background:#e6b800;}
+.service-btn.active{background:#333;color:#fff;font-weight:600;border:2px solid #fff;}
+input[type="text"], input[type="number"], input[type="date"]{padding:10px;margin-top:6px;border-radius:8px;border:1px solid #333;font-size:14px;width:100%;box-sizing:border-box;}
+button{background:#FECB10;color:#333;border:2px solid #fff;border-radius:8px;padding:10px 18px;cursor:pointer;font-size:14px;font-weight:600;transition:all .3s ease;}
+button:hover{background:#fff;color:#333;}
+.lucky-btn{background:#FECB10;color:#333;border:2px solid #fff;border-radius:8px;padding:8px 14px;margin-left:10px;font-weight:600;}
+.add-field-btn{margin-top:8px;font-size:13px;padding:6px 12px;border-radius:6px;}
+.remove-btn{margin-left:6px;padding:4px 10px;font-size:12px;background:#fff;color:#333;border:1px solid #333;border-radius:6px;cursor:pointer;}
+.remove-btn:hover{background:#fdd;}
+.cta-btn{margin-top:18px;width:100%;font-size:18px;font-weight:700;padding:14px 20px;background:#333;color:#fff;border:none;border-radius:10px;cursor:pointer;transition:all .3s ease;}
+.cta-btn:hover{background:#222;transform:translateY(-2px);}
+#outputWrapper{margin-top:20px;padding:8px;border-radius:10px;background:transparent;}
+#projectPreview{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+#projectPreview .left{font-weight:700;}
+#projectPreview .right{text-align:right;font-size:14px;color:#333;min-width:220px;}
+#hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;}
+.total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
+.diskon-rp{color:#333;font-weight:600;margin-left:6px;}
+.rekomendasi{margin-top:15px;padding:14px;border:2px solid #333;background:#fff;font-weight:600;font-size:15px;border-radius:8px;color:#333;}
+.rekening-box{margin-top:20px;padding:14px;border:1px solid #333;border-radius:10px;background:#fff;}
+.rekening-row button{background:#FECB10;color:#333;border:2px solid #fff;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600;}
+.judul-uraian{font-size:18px;font-weight:600;margin-top:18px;padding:8px;background:#FECB10;color:#333;border-left:5px solid #333;border-radius:6px;}
+.uraian-list{font-size:15px;margin-top:10px;padding-left:20px;color:#333;}
+#invoice{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#ffffff;border:2px solid #000; box-shadow:0 6px 18px rgba(0,0,0,0.06);}
+.invoice-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
+.invoice-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.invoice-row .left{flex:1;display:flex;align-items:center;gap:8px;}
+.invoice-row .left .label{font-weight:600;}
+.pay-btn{padding:8px 12px;border-radius:8px;border:1px solid #333;background:#F0F0F0;cursor:pointer;}
+.pay-btn.paid{background:#2ecc71;color:#fff;border-color:#27ae60;}
+.invoice-row .nominal{min-width:140px;text-align:right;font-weight:700;}
+.invoice-row .dateWrap{min-width:160px;display:flex;flex-direction:column;gap:6px;}
+.dateWrap input[type="date"]{width:100%;}
+.sisa-row{margin-top:12px;padding-top:12px;border-top:1px dashed #ddd;display:flex;justify-content:space-between;align-items:center;}
+.sisa-row .label{font-weight:700;}
+.small-note{font-size:13px;color:#555;margin-top:8px;}
+.status-badge{font-size:13px;padding:6px 10px;border-radius:8px;background:#f3f4f3;border:1px solid #ddd;}
+#lunasBadge{display:none;margin-top:10px;padding:10px;border-radius:10px;background:#2ecc71;color:#fff;font-weight:700;text-align:center;box-shadow:0 4px 12px rgba(46,204,113,0.15);}
+.custom-controls{display:flex;gap:8px;align-items:center;}
+.custom-row{border:1px dashed #ddd;padding:8px;border-radius:8px;margin-bottom:10px;background:#fafafa;}
+.custom-row .actions{display:flex;gap:8px;align-items:center;}
+.custom-row .delete-btn{background:#fff;color:#c0392b;border:1px solid #c0392b;padding:6px 10px;border-radius:6px;cursor:pointer;}
+.custom-row .delete-btn:hover{background:#fcecec;}
+</style>
+
+<!-- libs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(reg => console.log('Service Worker terdaftar:', reg.scope))
+      .catch(err => console.log('Gagal daftar SW:', err));
+  });
+}
+</script>
+<body>
+<div class="header-row">
+  <div style="text-align:left;">
+    <h2>
+      <div class="title-wrapper">
+        <span class="title-small">Estimasi</span>
+        <span class="title-big">BIAYA DESAIN</span>
+      </div>
+    </h2>
+  </div>
+
+  <div class="project-inputs" style="width:300px;">
+    <label for="projectName">Nama Proyek</label>
+    <input type="text" id="projectName" placeholder="Contoh: Renovasi Rumah Budi" />
+    <label for="projectCode">Kode Proyek</label>
+    <input type="text" id="projectCode" placeholder="Contoh: PRJ-2025-001" />
+  </div>
+</div>
+
+<h3>Pilih Jasa Desain</h3>
+<div class="grid" id="serviceButtons"></div>
+
+<div id="uraianDisplay"></div>
+<div id="manualInput" style="margin-top:12px; display:none;">
+  <label>Detail Kelengkapan Gambar:</label>
+  <div id="fieldsContainer"></div>
+  <button type="button" class="add-field-btn" onclick="addField()">+ Add Field</button>
+</div>
+
+<label>Harga (Rp):</label>
+<div id="hargaDisplay" style="padding:10px;border:1px solid #d1d5db;border-radius:8px;background:#f3f4f6;">-</div>
+
+<label for="luasan">Luas (m²) / Jumlah Paket:</label>
+<input type="number" id="luasan" placeholder="Masukkan angka" />
+
+<div style="margin-top:12px; display:flex; align-items:center; gap:10px;">
+  <div style="flex:1;">
+    <label for="diskon">Diskon (%):</label>
+    <input type="number" id="diskon" placeholder="0" />
+  </div>
+  <button type="button" class="lucky-btn" onclick="luckyDiscount()">🎁 Lucky Discount</button>
+</div>
+
+<div style="margin-top:12px;">
+  <label for="redeem">CODE REDEEM:</label>
+  <input type="number" id="redeem" placeholder="0" />
+</div>
+
+<button class="cta-btn" onclick="hitung()">⚡ Hitung Estimasi</button>
+
+<div id="outputWrapper">
+  <div id="projectPreview">
+    <div class="left">
+      <div id="previewTitle" style="font-size:16px;font-weight:700;">Penawaran</div>
+      <div id="previewSub" style="font-size:13px;color:#666;">Detail penawaran dan invoice</div>
+    </div>
+    <div class="right">
+      <div id="previewProjectName">Nama Proyek: -</div>
+      <div id="previewProjectCode" style="color:#666;">Kode Proyek: -</div>
+    </div>
+  </div>
+
+  <div id="hasil"></div>
+
+  <div id="invoice">
+    <div class="invoice-controls">
+      <h3 id="invoiceTitle">INVOICE</h3>
+      <div>
+        <div class="custom-controls">
+          <button class="add-field-btn" onclick="addCustomTerm()">+ Tambah Termin Custom</button>
+          <button class="add-field-btn" onclick="resetCustoms()">Reset Termin Custom</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="invoiceContent"></div>
+    <div id="lunasBadge">LUNAS</div>
+    <div class="small-note">Tekan tombol <em>Terbayar</em> untuk menandai pembayaran; tanggal & jumlah dapat diubah. Termin custom bisa dihapus.</div>
+  </div>
+</div>
+
+<button class="cta-btn" onclick="downloadPDF()">📥 Download PDF</button>
+
+<script>
+/* ---------------------------
+   Semua fungsi UI & logic Anda (tetap utuh).
+   Saya hanya menambahkan keterangan metode pembayaran.
+   --------------------------- */
+
+/* ----- Data & UI wiring (sama) ----- */
+const jasaList=[
+  { nama:"Desain Konsep", harga:60000, satuan:"m²", produk:["Visual Siteplan","Visual Denah","Visual Tampak","Visual Potongan","Visualisasi 3d"] },
+  { nama:"Desain Prarencana", harga:125000, satuan:"m²", produk:["Semua Produk Konsep Desain","Siteplan","Denah","Tampak","Potongan","Visualisasi 3d","Denah Elektrikal"] },
+  { nama:"Desain DED", harga:215000, satuan:"m²", produk:["Semua Produk Desain Prarencana","Detail Pondasi","Detail Struktur","Detail Kusen","Detail Pola Lantai","Detail Khusus","RAB Arsitektural"] },
+  { nama:"Paket Desain Rumah Hemat", harga:2150000, satuan:"paket", produk:["Produk Konsep"] },
+  { nama:"Paket Rumah Luas 60-120", harga:11000000, satuan:"paket", produk:["Produk Prarencana + Keperluan IMB"] },
+  { nama:"Paket Rumah Luas 121-240", harga:21000000, satuan:"paket", produk:["Produk Prarencana + Keperluan IMB"] },
+  { nama:"Paket Rumah Luas 241-300", harga:30000000, satuan:"paket", produk:["Produk Prarencana + Keperluan IMB"] },
+  { nama:"Kelengkapan Gambar", harga:1700000, satuan:"paket", produk:[] }
+];
+
+let selectedJasa=null;
+const serviceButtonsDiv=document.getElementById("serviceButtons");
+jasaList.forEach((j,index)=>{
+  const btn=document.createElement("div");
+  btn.className="service-btn";
+  btn.innerText=`${j.nama} (Rp ${j.harga.toLocaleString()} / ${j.satuan})`;
+  btn.onclick=()=>selectJasa(index,btn);
+  serviceButtonsDiv.appendChild(btn);
+});
+
+function selectJasa(index,btn){
+  document.querySelectorAll(".service-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  selectedJasa=jasaList[index];
+  document.getElementById("hargaDisplay").innerText=`Rp ${selectedJasa.harga.toLocaleString()} / ${selectedJasa.satuan}`;
+
+  const uraianDiv=document.getElementById("uraianDisplay");
+  const manualInput=document.getElementById("manualInput");
+  if(selectedJasa.nama==="Kelengkapan Gambar"){
+    uraianDiv.innerHTML="";
+    manualInput.style.display="block";
+    document.getElementById("fieldsContainer").innerHTML="";
+    addField();
+  } else {
+    manualInput.style.display="none";
+    uraianDiv.innerHTML=`<div class='judul-uraian'>Uraian Pekerjaan:</div>
+      <ul class='uraian-list'>${selectedJasa.produk.map(p=>`<li>${p}</li>`).join("")}</ul>`;
+  }
+}
+
+function addField(value=""){
+  const container=document.getElementById("fieldsContainer");
+  const div=document.createElement("div");
+  div.style.display="flex";
+  div.style.alignItems="center";
+  div.style.marginTop="6px";
+  const input=document.createElement("input");
+  input.type="text";
+  input.placeholder="Masukkan detail gambar";
+  input.value=value;
+  const remove=document.createElement("button");
+  remove.innerText="x";
+  remove.className="remove-btn";
+  remove.onclick=()=>div.remove();
+  div.appendChild(input);
+  div.appendChild(remove);
+  container.appendChild(div);
+}
+
+/* invoice state */
+let invoiceState = {
+  dp:{paid:false,date:''},
+  t1:{paid:false,date:''},
+  t2:{paid:false,date:''},
+  total:0,
+  dpNom:0, term1Nom:0, term2Nom:0,
+  custom:{ }
+};
+let lunasAlerted = false;
+let customCounter = 0;
+
+/* project preview sync */
+const projectNameInput = document.getElementById('projectName');
+const projectCodeInput = document.getElementById('projectCode');
+function updateProjectPreview(){
+  document.getElementById('previewProjectName').innerText = `Nama Proyek: ${projectNameInput.value || '-'}`;
+  document.getElementById('previewProjectCode').innerText = `Kode Proyek: ${projectCodeInput.value || '-'}`;
+}
+projectNameInput.addEventListener('input', updateProjectPreview);
+projectCodeInput.addEventListener('input', updateProjectPreview);
+updateProjectPreview();
+
+/* main calculation + render invoice (sama, hanya tambahan keterangan di metode pembayaran) */
+function hitung(){
+  if(!selectedJasa){ document.getElementById("hasil").innerText="Pilih jasa terlebih dahulu."; return; }
+
+  const luasan=parseFloat(document.getElementById("luasan").value)||0;
+  const diskon=parseFloat(document.getElementById("diskon").value)||0;
+  const redeem=parseFloat(document.getElementById("redeem").value)||0;
+
+  let total=selectedJasa.harga * luasan;
+  let potongan=total * (diskon/100);
+  let totalSetelahDiskon = total - potongan;
+  let totalAkhir = totalSetelahDiskon - redeem;
+  if(totalAkhir < 0) totalAkhir = 0;
+  invoiceState.total = totalAkhir;
+  lunasAlerted = false;
+
+  let pesan=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>📑 Penawaran Jasa: ${selectedJasa.nama}</div>`;
+  pesan+=`Harga satuan: Rp ${selectedJasa.harga.toLocaleString()} / ${selectedJasa.satuan}<br>`;
+  pesan+=`Jumlah: ${luasan} ${selectedJasa.satuan}<br>`;
+  pesan+=`Diskon: ${diskon}%${diskon>0?` <span class="diskon-rp">💰 Rp ${potongan.toLocaleString()}</span>`:''}<br>`;
+  pesan+=`Redeem Code: Rp ${redeem.toLocaleString()}<br>`;
+  pesan+=`<hr><div class="total">Total Estimasi: Rp <span id="totalCount">0</span></div>`;
+
+  if(selectedJasa.nama==="Kelengkapan Gambar"){
+    const fields=document.querySelectorAll("#fieldsContainer input");
+    const list=[...fields].map(f=>f.value.trim()).filter(v=>v);
+    if(list.length>0){
+      pesan+="<div class='judul-uraian'>Uraian Pekerjaan:</div>";
+      pesan+="<ul class='uraian-list'>"+list.map(p=>`<li>${p}</li>`).join("")+"</ul>";
+    }
+  } else if(selectedJasa.produk.length>0){
+    pesan+="<div class='judul-uraian'>Uraian Pekerjaan:</div>";
+    pesan+="<ul class='uraian-list'>"+selectedJasa.produk.map(p=>`<li>${p}</li>`).join("")+"</ul>";
+  }
+
+  if(selectedJasa.satuan==="m²"){
+    if(luasan>0 && luasan<=120) pesan+=`<div class='rekomendasi'>💡 Rekomendasi: Paket Rumah Luas 60-120 (Rp ${jasaList[4].harga.toLocaleString()})</div>`;
+    else if(luasan>=121 && luasan<=240) pesan+=`<div class='rekomendasi'>💡 Rekomendasi: Paket Rumah Luas 121-240 (Rp ${jasaList[5].harga.toLocaleString()})</div>`;
+    else if(luasan>=241 && luasan<=300) pesan+=`<div class='rekomendasi'>💡 Rekomendasi: Paket Rumah Luas 241-300 (Rp ${jasaList[6].harga.toLocaleString()})</div>`;
+  }
+
+  // --- METODE PEMBAYARAN: tampilkan keterangan kecil di bawah setiap termin ---
+  pesan+="<h4>Metode Pembayaran:</h4>";
+  pesan+=`<div>DP 30% = Rp ${(totalAkhir*0.3).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika penawaran disetujui.</em></div></div><br>`;
+  pesan+=`<div>Termin 1 (50%) = Rp ${(totalAkhir*0.5).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika layout/fasad disetujui dan lanjut ke 3D.</em></div></div><br>`;
+  pesan+=`<div>Termin 2 (20%) = Rp ${(totalAkhir*0.2).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika 3D disetujui dan lanjut ke kelengkapan gambar / RAB.</em></div></div>`;
+
+  pesan+=`<div class="rekening-box"><strong>Informasi Pembayaran:</strong><br>BCA 7772046793 a.n. Bayyild Rizqan Syarif<div class="rekening-row"><button onclick="copyRekening()">Copy</button></div></div>`;
+
+  const now=new Date();
+  const options={ weekday:'long', year:'numeric', month:'long', day:'numeric' };
+  const tanggal=now.toLocaleDateString('id-ID',options);
+  pesan+=`<div style="margin-top:12px;font-size:12px;color:#555;text-align:left;">Tanggal: ${tanggal}</div>`;
+
+  document.getElementById("hasil").innerHTML=pesan;
+
+  setTimeout(()=>{ const totalEl=document.getElementById("totalCount"); if(totalEl) countUp(totalEl,totalAkhir); },100);
+
+  /* invoice construction (munculkan di bawah hasil)
+     gunakan label yang menyertakan keterangan supaya invoice juga jelas */
+  const invoiceDiv = document.getElementById("invoice");
+  const invoiceContent = document.getElementById("invoiceContent");
+  invoiceDiv.style.display = "block";
+
+  const dpNom = Math.round(totalAkhir * 0.3);
+  const term1Nom = Math.round(totalAkhir * 0.5);
+  const term2Nom = Math.round(totalAkhir * 0.2);
+
+  invoiceState = {
+    dp:{paid:false,date:''},
+    t1:{paid:false,date:''},
+    t2:{paid:false,date:''},
+    total: totalAkhir,
+    dpNom, term1Nom, term2Nom,
+    custom:{}
+  };
+  customCounter = 0;
+
+  document.getElementById('invoiceTitle').innerText = `INVOICE Jasa Desain : ${selectedJasa.nama}`;
+  invoiceContent.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+      <div>
+        <div style="font-weight:700;">${projectNameInput.value || '-'}</div>
+        <div style="color:#666;font-size:13px;">${projectCodeInput.value || '-'}</div>
+      </div>
+      <div style="text-align:right;color:#333;">
+        <div style="font-weight:700">Total: Rp ${totalAkhir.toLocaleString()}</div>
+        <div style="font-size:13px;color:#666;">Tanggal: ${tanggal}</div>
+      </div>
+    </div>
+  `;
+
+  // gunakan label yang menyertakan keterangan (HTML kecil) untuk tiap termin
+  const labelDP = `DP 30%<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika penawaran disetujui.</em></div>`;
+  const labelT1 = `Termin 1 (50%)<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika layout/fasad disetujui dan lanjut ke 3D.</em></div>`;
+  const labelT2 = `Termin 2 (20%)<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika 3D disetujui dan lanjut ke kelengkapan gambar / RAB.</em></div>`;
+
+  invoiceContent.innerHTML += renderTermRowHTML('dp', labelDP, dpNom, true);
+  invoiceContent.innerHTML += renderTermRowHTML('t1', labelT1, term1Nom, true);
+  invoiceContent.innerHTML += renderTermRowHTML('t2', labelT2, term2Nom, true);
+
+  invoiceContent.innerHTML += `
+    <div class="sisa-row">
+      <div class="label">Sisa Pembayaran</div>
+      <div id="sisaValue" style="font-size:18px;font-weight:800">Rp ${totalAkhir.toLocaleString()}</div>
+    </div>
+
+    <div style="margin-top:8px;font-size:13px;color:#444;">
+      <strong>Status singkat:</strong> <span id="status_summary" class="status-badge">Belum ada pembayaran terdaftar.</span>
+    </div>
+  `;
+
+  document.getElementById('pay_dp').onclick = ()=>togglePaid('dp');
+  document.getElementById('pay_t1').onclick = ()=>togglePaid('t1');
+  document.getElementById('pay_t2').onclick = ()=>togglePaid('t2');
+
+  ['date_dp','date_t1','date_t2'].forEach(id=>{
+    document.getElementById(id).onchange = (e)=> {
+      const key = id.split('_')[1];
+      invoiceState[key].date = e.target.value;
+      updateInvoiceSummary();
+    };
+  });
+
+  updateInvoiceSummary();
+}
+
+/* remaining helper functions unchanged (renderTermRowHTML, addCustomTerm, etc.) */
+/* ... (sama seperti file Anda sebelumnya; pastikan menyalin fungsi-fungsi tersebut jika Anda menggabungkan) */
+
+function renderTermRowHTML(key,label,nominal,isDefault=false){
+  const safeNom = Number(nominal || 0).toLocaleString();
+  const dateId = `date_${key}`;
+  const payId = `pay_${key}`;
+  const deleteBtn = isDefault ? '' : `<button class="delete-btn" onclick="deleteCustomTerm('${key}')">Hapus</button>`;
+
+  return `
+    <div class="invoice-row ${isDefault ? '' : 'custom-row'}" id="row_${key}">
+      <div class="left">
+        <button id="${payId}" class="pay-btn">Tandai Terbayar</button>
+        <div class="label">${isDefault ? label : `<input type="text" id="label_${key}" value="${label}" />`}</div>
+      </div>
+      ${isDefault ? `<div class="nominal">Rp ${safeNom}</div>` : `<div style="min-width:140px;text-align:right;"><input type="number" id="amt_${key}" value="${nominal}" /></div>`}
+      <div class="dateWrap">
+        <label style="font-size:13px;color:#666">Tanggal Bayar</label>
+        <input type="date" id="${dateId}" />
+        ${deleteBtn}
+      </div>
+    </div>
+  `;
+}
+
+function addCustomTerm(){
+  customCounter += 1;
+  const key = `custom_${customCounter}`;
+  invoiceState.custom[key] = { label: `Custom ${customCounter}`, amount: 0, paid:false, date:'' };
+
+  const invoiceContent = document.getElementById('invoiceContent');
+  const sisaRow = invoiceContent.querySelector('.sisa-row');
+  const html = renderTermRowHTML(key, invoiceState.custom[key].label, invoiceState.custom[key].amount, false);
+  if(sisaRow){
+    sisaRow.insertAdjacentHTML('beforebegin', html);
+  } else {
+    invoiceContent.insertAdjacentHTML('beforeend', html);
+  }
+
+  document.getElementById(`pay_${key}`).onclick = ()=>toggleCustomPaid(key);
+  const amtEl = document.getElementById(`amt_${key}`);
+  const labelEl = document.getElementById(`label_${key}`);
+  const dateEl = document.getElementById(`date_${key}`);
+
+  amtEl.onchange = (e)=>{
+    invoiceState.custom[key].amount = Number(e.target.value) || 0;
+    updateInvoiceSummary();
+  };
+  labelEl.onchange = (e)=>{
+    invoiceState.custom[key].label = e.target.value || invoiceState.custom[key].label;
+  };
+  dateEl.onchange = (e)=>{
+    invoiceState.custom[key].date = e.target.value;
+  };
+  updateInvoiceSummary();
+}
+
+function deleteCustomTerm(key){
+  delete invoiceState.custom[key];
+  const row = document.getElementById(`row_${key}`);
+  if(row) row.remove();
+  updateInvoiceSummary();
+}
+
+function resetCustoms(){
+  invoiceState.custom = {};
+  customCounter = 0;
+  document.querySelectorAll('.custom-row').forEach(n=>n.remove());
+  updateInvoiceSummary();
+}
+
+function togglePaid(key){
+  const btn = document.getElementById(`pay_${key}`);
+  const dateInput = document.getElementById(`date_${key}`);
+  const todayStr = (new Date()).toISOString().slice(0,10);
+
+  invoiceState[key].paid = !invoiceState[key].paid;
+
+  if(invoiceState[key].paid){
+    if(dateInput && !dateInput.value){
+      dateInput.value = todayStr;
+      invoiceState[key].date = todayStr;
+    } else if(dateInput) {
+      invoiceState[key].date = dateInput.value;
+    }
+    btn.classList.add('paid');
+    btn.innerText = 'Terbayar';
+  } else {
+    invoiceState[key].date = '';
+    if(dateInput) dateInput.value = '';
+    btn.classList.remove('paid');
+    btn.innerText = 'Tandai Terbayar';
+  }
+  updateInvoiceSummary();
+}
+
+function toggleCustomPaid(key){
+  const btn = document.getElementById(`pay_${key}`);
+  const dateInput = document.getElementById(`date_${key}`);
+  const amtInput = document.getElementById(`amt_${key}`);
+  const todayStr = (new Date()).toISOString().slice(0,10);
+
+  const entry = invoiceState.custom[key];
+  if(!entry) return;
+
+  entry.paid = !entry.paid;
+
+  if(entry.paid){
+    entry.amount = Number(amtInput.value) || 0;
+    if(!dateInput.value){
+      dateInput.value = todayStr;
+      entry.date = todayStr;
+    } else {
+      entry.date = dateInput.value;
+    }
+    btn.classList.add('paid');
+    btn.innerText = 'Terbayar';
+  } else {
+    entry.date = '';
+    if(dateInput) dateInput.value = '';
+    btn.classList.remove('paid');
+    btn.innerText = 'Tandai Terbayar';
+  }
+  updateInvoiceSummary();
+}
+
+function updateInvoiceSummary(){
+  const parts = [];
+  let paidSum = 0;
+  const dpNom = invoiceState.dpNom || 0;
+  const t1Nom = invoiceState.term1Nom || 0;
+  const t2Nom = invoiceState.term2Nom || 0;
+
+  if(invoiceState.dp && invoiceState.dp.paid){
+    const d = invoiceState.dp.date || document.getElementById('date_dp')?.value || '—';
+    parts.push(`DP terbayar ${d}`);
+    paidSum += dpNom;
+  }
+  if(invoiceState.t1 && invoiceState.t1.paid){
+    const d = invoiceState.t1.date || document.getElementById('date_t1')?.value || '—';
+    parts.push(`Termin1 terbayar ${d}`);
+    paidSum += t1Nom;
+  }
+  if(invoiceState.t2 && invoiceState.t2.paid){
+    const d = invoiceState.t2.date || document.getElementById('date_t2')?.value || '—';
+    parts.push(`Termin2 terbayar ${d}`);
+    paidSum += t2Nom;
+  }
+
+  for(const k in invoiceState.custom){
+    const e = invoiceState.custom[k];
+    const amtInput = document.getElementById(`amt_${k}`);
+    if(amtInput) e.amount = Number(amtInput.value) || 0;
+    if(e.paid){
+      const d = e.date || document.getElementById(`date_${k}`)?.value || '—';
+      const lbl = (document.getElementById(`label_${k}`)?.value) || e.label || 'Custom';
+      parts.push(`${lbl} terbayar ${d}`);
+      paidSum += Number(e.amount || 0);
+    }
+  }
+
+  const total = invoiceState.total || 0;
+  const remain = Math.max(0, Math.round(total - paidSum));
+  const sisaEl = document.getElementById('sisaValue');
+  if(sisaEl) sisaEl.innerText = `Rp ${remain.toLocaleString()}`;
+
+  const summary = parts.length ? parts.join(' • ') : 'Belum ada pembayaran terdaftar.';
+  const el = document.getElementById('status_summary');
+  if(el){
+    el.innerText = summary;
+    el.style.background = parts.length ? '#ecffef' : '#f3f4f3';
+    el.style.borderColor = parts.length ? '#b7e6c1' : '#ddd';
+  }
+
+  const defaultPaid = (invoiceState.dp.paid && invoiceState.t1.paid && invoiceState.t2.paid);
+  const allCustomPaid = Object.keys(invoiceState.custom).length === 0 ? true : Object.keys(invoiceState.custom).every(k => invoiceState.custom[k].paid);
+  const allPaid = defaultPaid && allCustomPaid;
+  const lunasBadge = document.getElementById('lunasBadge');
+  if(allPaid && remain === 0){
+    if(lunasBadge){
+      lunasBadge.style.display = 'block';
+      if(el){ el.innerText = 'LUNAS'; el.style.background = '#ecffef'; el.style.borderColor = '#b7e6c1'; }
+      if(!lunasAlerted){
+        setTimeout(()=>{ alert('Status Pembayaran: LUNAS'); }, 50);
+        lunasAlerted = true;
+      }
+    }
+  } else {
+    if(lunasBadge) lunasBadge.style.display = 'none';
+  }
+}
+
+function countUp(element,target){
+  let start=0; const dur=800; const step=20;
+  const inc=target/(dur/step);
+  let timer=setInterval(()=>{
+    start+=inc;
+    if(start>=target){ start=target; clearInterval(timer); }
+    element.innerText=Math.floor(start).toLocaleString();
+  },step);
+}
+
+function copyRekening(){
+  navigator.clipboard.writeText("7772046793");
+  alert("Nomor rekening berhasil disalin: 7772046793");
+}
+
+function luckyDiscount(){
+  const options=[5,10,10,10,15,20,25,30,35,50];
+  let inp=document.getElementById("diskon");
+  let shuffle=setInterval(()=>{inp.value=options[Math.floor(Math.random()*options.length)];},100);
+  setTimeout(()=>{clearInterval(shuffle); inp.value=options[Math.floor(Math.random()*options.length)];},1500);
+}
+
+/* ---------------------------
+   HIGH-QUALITY MULTI-STEP DOWNSCALE & downloadPDF
+   (sama seperti versi Anda sebelumnya; tidak diubah)
+   --------------------------- */
+function downscaleCanvasHighQuality(sourceCanvas, targetW, targetH){
+  let cur = document.createElement('canvas');
+  cur.width = sourceCanvas.width;
+  cur.height = sourceCanvas.height;
+  const curCtx = cur.getContext('2d');
+  curCtx.drawImage(sourceCanvas,0,0);
+
+  let w = cur.width, h = cur.height;
+
+  while (w * 0.5 > targetW) {
+    const nw = Math.max(targetW, Math.floor(w * 0.5));
+    const nh = Math.max(targetH, Math.floor(h * 0.5));
+    const tmp = document.createElement('canvas');
+    tmp.width = nw;
+    tmp.height = nh;
+    const tctx = tmp.getContext('2d');
+    tctx.imageSmoothingEnabled = true;
+    try { tctx.imageSmoothingQuality = 'high'; } catch(e){}
+    tctx.drawImage(cur, 0, 0, w, h, 0, 0, nw, nh);
+    cur = tmp;
+    w = nw; h = nh;
+  }
+
+  const final = document.createElement('canvas');
+  final.width = targetW;
+  final.height = targetH;
+  const fctx = final.getContext('2d');
+  fctx.fillStyle = '#ffffff';
+  fctx.fillRect(0,0,targetW,targetH);
+  fctx.imageSmoothingEnabled = true;
+  try { fctx.imageSmoothingQuality = 'high'; } catch(e){}
+  fctx.drawImage(cur, 0, 0, w, h, 0, 0, targetW, targetH);
+  return final;
+}
+
+function canvasToBlob(canvas, type='image/png'){
+  return new Promise(resolve => {
+    canvas.toBlob(blob => resolve(blob), type);
+  });
+}
+
+async function downloadPDF(){
+  const outputWrapper = document.getElementById("outputWrapper");
+  if (!outputWrapper.innerText.trim()) { alert("Belum ada output. Hitung estimasi dulu."); return; }
+  if (!selectedJasa) { alert("Pilih jasa terlebih dahulu sebelum download PDF."); return; }
+
+  updateInvoiceSummary();
+  await new Promise(r=>setTimeout(r,120));
+
+  const hasilEl = document.getElementById("hasil");
+  const invoiceEl = document.getElementById("invoice");
+  const oldHasilBoxShadow = hasilEl ? hasilEl.style.boxShadow : null;
+  const oldInvoiceBoxShadow = invoiceEl ? invoiceEl.style.boxShadow : null;
+  if (hasilEl) hasilEl.style.boxShadow = "none";
+  if (invoiceEl) invoiceEl.style.boxShadow = "none";
+
+  const captureScale = window.devicePixelRatio || 1;
+  const captureCanvas = await html2canvas(outputWrapper, { scale: captureScale, useCORS:true, logging:false, backgroundColor:'#ffffff' });
+
+  if (hasilEl) hasilEl.style.boxShadow = oldHasilBoxShadow || "";
+  if (invoiceEl) invoiceEl.style.boxShadow = oldInvoiceBoxShadow || "";
+
+  const PAGE_MARGIN = 40; // px (ke kiri & kanan)
+  const BASE_PDF_WIDTH = 1240; // baseline width if content small
+  const MAX_BYTES = 2 * 1024 * 1024;
+
+  const usableBaseW = Math.max(100, Math.floor(BASE_PDF_WIDTH - PAGE_MARGIN*2));
+
+  let initialTargetW = Math.min(usableBaseW, captureCanvas.width);
+  let initialTargetH = Math.round((captureCanvas.height * initialTargetW) / captureCanvas.width);
+  let workingCanvas = downscaleCanvasHighQuality(captureCanvas, initialTargetW, initialTargetH);
+
+  let blob = await canvasToBlob(workingCanvas, 'image/png');
+  let attempts = 0;
+  while (blob && blob.size > MAX_BYTES && attempts < 8) {
+    attempts++;
+    const newW = Math.max(400, Math.floor(workingCanvas.width * 0.9));
+    const newH = Math.round((captureCanvas.height * newW) / captureCanvas.width);
+    workingCanvas = downscaleCanvasHighQuality(captureCanvas, newW, newH);
+    blob = await canvasToBlob(workingCanvas, 'image/png');
+  }
+
+  let useJPEG = false;
+  if (blob && blob.size > MAX_BYTES) {
+    useJPEG = true;
+    let q = 0.92;
+    let lastAcceptBlob = blob;
+    while (q >= 0.55) {
+      const dataUrl = workingCanvas.toDataURL('image/jpeg', q);
+      const b = await (await fetch(dataUrl)).blob();
+      if (b.size <= MAX_BYTES) { blob = b; break; }
+      lastAcceptBlob = b;
+      q -= 0.07;
+    }
+    if (blob.size > MAX_BYTES) blob = lastAcceptBlob;
+  }
+
+  if(!blob){
+    alert('Gagal membuat file PNG/JPEG untuk PDF.');
+    return;
+  }
+
+  const imgW = workingCanvas.width;
+  const imgH = workingCanvas.height;
+  const pdfPageW = Math.ceil(imgW + PAGE_MARGIN*2);
+  const pdfPageH = Math.ceil(imgH + PAGE_MARGIN*2);
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p","px",[pdfPageW, pdfPageH]);
+
+  let imgData;
+  if (!useJPEG) {
+    imgData = workingCanvas.toDataURL('image/png');
+  } else {
+    imgData = await new Promise(res=>{
+      const reader = new FileReader();
+      reader.onload = ()=>res(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  const x = PAGE_MARGIN;
+  const y = PAGE_MARGIN;
+  const imgType = useJPEG ? "JPEG" : "PNG";
+  pdf.addImage(imgData, imgType, x, y, imgW, imgH);
+
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2,'0');
+  const dd = String(now.getDate()).padStart(2,'0');
+  const jasaName = selectedJasa ? selectedJasa.nama.replace(/\s+/g,'_') : 'Penawaran';
+  const filename = `Penawaran_Jasa_${jasaName}_${yyyy}${mm}${dd}.pdf`;
+
+  const finalBlob = await pdf.output('blob');
+  const url = URL.createObjectURL(finalBlob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
