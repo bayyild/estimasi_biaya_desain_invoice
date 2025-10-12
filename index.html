@@ -86,22 +86,17 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 <body>
-<!-- HEADER: logo DI ATAS judul (vertical, centered) -->
-<div class="header-row" style="flex-direction:column; align-items:center; gap:12px; text-align:center;">
-  <img src="./icons/icon-512.png"
-       alt="Logo Estimasi Biaya Desain"
-       style="width:96px; height:96px; border-radius:18px; object-fit:cover; box-shadow:0 10px 30px rgba(0,0,0,0.12);">
+<div class="header-row">
+  <div style="text-align:left;">
+    <h2>
+      <div class="title-wrapper">
+        <span class="title-small">Estimasi</span>
+        <span class="title-big">BIAYA DESAIN</span>
+      </div>
+    </h2>
+  </div>
 
-  <h2 style="margin:0;">
-    <div class="title-wrapper" style="display:inline-block;">
-      <span class="title-small">Estimasi</span>
-      <span class="title-big">BIAYA DESAIN</span>
-    </div>
-  </h2>
-  <div style="font-size:13px;color:#222;margin-top:6px;">Solusi cepat & rapi untuk penawaran jasa desain</div>
-
-  <!-- Input project (di bawah header, centered) -->
-  <div class="project-inputs" style="width:100%; max-width:420px; margin-top:10px;">
+  <div class="project-inputs" style="width:300px;">
     <label for="projectName">Nama Proyek</label>
     <input type="text" id="projectName" placeholder="Contoh: Renovasi Rumah Budi" />
     <label for="projectCode">Kode Proyek</label>
