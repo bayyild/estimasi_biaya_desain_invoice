@@ -1,41 +1,74 @@
-const CACHE_NAME = "desain-cache-v1";
-const BASE_PATH = "/estimasi_biaya_desain_invoice/";
-
+const CACHE_NAME = 'desain-cache-v1';
 const FILES_TO_CACHE = [
-  BASE_PATH,
-  BASE_PATH + "index.html",
-  BASE_PATH + "manifest.json",
-  BASE_PATH + "icons/icon-192.png",
-  BASE_PATH + "icons/icon-512.png"
+  './',
+  './index.html',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  // tambahkan file statis lain yang perlu dicache, contoh:
+  // './styles.css',
+  // './app.js'
 ];
 
-self.addEventListener("install", event => {
-  console.log("SW installing...");
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
-  );
+// Install: cache app shell
+self.addEventListener('install', (event) => {
   self.skipWaiting();
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(FILES_TO_CACHE))
+  );
 });
 
-self.addEventListener("activate", event => {
-  console.log("SW activated");
-  event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return (
-        response ||
-        fetch(event.request).catch(() => {
-          if (
-            event.request.mode === "navigate" ||
-            event.request.headers.get("accept")?.includes("text/html")
-          ) {
-            return caches.match(BASE_PATH + "index.html");
-          }
+// Activate: bersihkan cache lama
+self.addEventListener('activate', (event) => {
+  self.clients.claim();
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) return caches.delete(key);
         })
-      );
+      )
+    )
+  );
+});
+
+// Fetch: respond with cache first, fallback network
+self.addEventListener('fetch', (event) => {
+  // hanya handle GET
+  if (event.request.method !== 'GET') return;
+
+  const requestUrl = new URL(event.request.url);
+
+  // network-first for navigation (HTML) to keep start_url fresh
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then(res => {
+          // update cache with fresh response
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(event.request, resClone));
+          return res;
+        })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
+  }
+
+  // cache-first for other assets
+  event.respondWith(
+    caches.match(event.request).then(cached => {
+      if (cached) return cached;
+      return fetch(event.request).then(response => {
+        // hanya cache successful responses
+        if (!response || response.status !== 200 || response.type === 'opaque') return response;
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+        return response;
+      }).catch(() => {
+        // fallback jika perlu (bisa return offline page jika ada)
+        return caches.match('./index.html');
+      });
     })
   );
 });
