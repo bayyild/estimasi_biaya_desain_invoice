@@ -19,10 +19,10 @@
 body { font-family:'Poppins',sans-serif; margin:20px; background:#FECB10; color:#333; }
 .header-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;}
 h2{margin:0;}
-.title-wrapper { display:flex; align-items:center; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.25); }
-.title-small { display:block; font-size:16px; font-weight:600; color:#444; background:#fff; padding:6px 12px 4px; text-align:center; }
-.title-big { display:block; font-size:26px; font-weight:700; color:#444; background:#fff; padding:6px 14px 10px; text-align:center; letter-spacing:1px; }
-.title-logo{ width:64px; height:64px; object-fit:contain; margin:6px 10px 6px 10px; }
+.title-wrapper { display:flex; flex-direction:column; align-items:center; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.12); background:#fff; padding:8px 12px; }
+.title-small { display:block; font-size:16px; font-weight:600; color:#444; background:transparent; padding:6px 0 2px; text-align:center; }
+.title-big { display:block; font-size:26px; font-weight:700; color:#444; background:transparent; padding:4px 0 8px; text-align:center; letter-spacing:1px; }
+.title-logo{ width:96px; height:96px; object-fit:contain; margin:0 0 6px 0; display:block; }
 .project-inputs{min-width:260px;}
 .project-inputs label{display:block;font-size:13px;color:#222;margin-bottom:4px;}
 .project-inputs input{margin-bottom:8px;}
@@ -46,7 +46,7 @@ button:hover{background:#fff;color:#333;}
 #projectPreview .right{text-align:right;font-size:14px;color:#333;min-width:220px;}
 /* Hasil (bubble hasil) - siapkan posisi relative agar logo bisa diletakkan di kiri atas */
 #hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;position:relative;}
-.hasil-logo{display:block;position:relative;margin:0 auto 12px;width:80px;height:80px;object-fit:contain;} 
+.hasil-logo{position:absolute;right:12px;top:12px;width:80px;height:80px;object-fit:contain;}  
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .diskon-rp{color:#333;font-weight:600;margin-left:6px;}
 .rekomendasi{margin-top:15px;padding:14px;border:2px solid #333;background:#fff;font-weight:600;font-size:15px;border-radius:8px;color:#333;}
@@ -55,7 +55,7 @@ button:hover{background:#fff;color:#333;}
 .judul-uraian{font-size:18px;font-weight:600;margin-top:18px;padding:8px;background:#FECB10;color:#333;border-left:5px solid #333;border-radius:6px;}
 .uraian-list{font-size:15px;margin-top:10px;padding-left:20px;color:#333;}
 #invoice{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#ffffff;border:2px solid #000; box-shadow:0 6px 18px rgba(0,0,0,0.06);position:relative;}
-.invoice-logo{display:block;position:relative;margin:0 auto 12px;width:80px;height:80px;object-fit:contain;} 
+.invoice-logo{position:absolute;left:12px;top:12px;width:80px;height:80px;object-fit:contain;}  
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .invoice-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
 .invoice-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
@@ -96,7 +96,7 @@ if ('serviceWorker' in navigator) {
   <div style="text-align:left;">
     <h2>
       <div class="title-wrapper">
-        <!-- tambahkan logo di bubble bersama tulisan BIAYA DESAIN -->
+        <!-- logo di atas, estimasi, lalu biaya desain (stack vertikal) -->
         <img src="Logo PNG.png" alt="Logo" class="title-logo" />
         <span class="title-small">Estimasi</span>
         <span class="title-big">BIAYA DESAIN</span>
