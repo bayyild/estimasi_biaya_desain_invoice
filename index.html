@@ -19,16 +19,18 @@
 body { font-family:'Poppins',sans-serif; margin:20px; background:#FECB10; color:#333; }
 .header-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;}
 h2{margin:0;}
-.title-wrapper { display:inline-block; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.25); }
+.title-wrapper { display:flex; align-items:center; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.25); }
 .title-small { display:block; font-size:16px; font-weight:500; color:#fff; background:#333; padding:4px 12px 2px; text-align:center; }
 .title-big { display:block; font-size:26px; font-weight:700; color:#333; background:#fff; padding:4px 14px 8px; text-align:center; letter-spacing:1px; }
+.title-logo{ width:44px; height:44px; object-fit:contain; margin:6px 8px 6px 10px; }
 .project-inputs{min-width:260px;}
 .project-inputs label{display:block;font-size:13px;color:#222;margin-bottom:4px;}
 .project-inputs input{margin-bottom:8px;}
 .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; margin-bottom:20px; }
-.service-btn{ padding:16px; border:2px solid #fff; border-radius:12px; background:#FECB10; color:#333; cursor:pointer; text-align:center; font-size:15px; font-weight:500; transition:all .3s ease; box-shadow:0 2px 6px rgba(0,0,0,.1); }
-.service-btn:hover{background:#e6b800;}
-.service-btn.active{background:#333;color:#fff;font-weight:600;border:2px solid #fff;}
+/* Button jasa desain: putih dengan border abu tua, teks bold */
+.service-btn{ padding:16px; border:2px solid #444; border-radius:12px; background:#fff; color:#333; cursor:pointer; text-align:center; font-size:15px; font-weight:700; transition:all .3s ease; box-shadow:0 2px 6px rgba(0,0,0,.04); }
+.service-btn:hover{background:#f6f6f6;}
+.service-btn.active{background:#333;color:#fff;font-weight:700;border:2px solid #333;}
 input[type="text"], input[type="number"], input[type="date"]{padding:10px;margin-top:6px;border-radius:8px;border:1px solid #333;font-size:14px;width:100%;box-sizing:border-box;}
 button{background:#FECB10;color:#333;border:2px solid #fff;border-radius:8px;padding:10px 18px;cursor:pointer;font-size:14px;font-weight:600;transition:all .3s ease;}
 button:hover{background:#fff;color:#333;}
@@ -42,7 +44,9 @@ button:hover{background:#fff;color:#333;}
 #projectPreview{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 #projectPreview .left{font-weight:700;}
 #projectPreview .right{text-align:right;font-size:14px;color:#333;min-width:220px;}
-#hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;}
+/* Hasil (bubble hasil) - siapkan posisi relative agar logo bisa diletakkan di kiri atas */
+#hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;position:relative;}
+.hasil-logo{position:absolute;left:12px;top:12px;width:40px;height:40px;object-fit:contain;}
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .diskon-rp{color:#333;font-weight:600;margin-left:6px;}
 .rekomendasi{margin-top:15px;padding:14px;border:2px solid #333;background:#fff;font-weight:600;font-size:15px;border-radius:8px;color:#333;}
@@ -50,7 +54,9 @@ button:hover{background:#fff;color:#333;}
 .rekening-row button{background:#FECB10;color:#333;border:2px solid #fff;border-radius:6px;padding:6px 12px;cursor:pointer;font-size:13px;font-weight:600;}
 .judul-uraian{font-size:18px;font-weight:600;margin-top:18px;padding:8px;background:#FECB10;color:#333;border-left:5px solid #333;border-radius:6px;}
 .uraian-list{font-size:15px;margin-top:10px;padding-left:20px;color:#333;}
-#invoice{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#ffffff;border:2px solid #000; box-shadow:0 6px 18px rgba(0,0,0,0.06);}
+#invoice{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#ffffff;border:2px solid #000; box-shadow:0 6px 18px rgba(0,0,0,0.06);position:relative;}
+.invoice-logo{position:absolute;left:12px;top:12px;width:40px;height:40px;object-fit:contain;}
+.total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .invoice-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
 .invoice-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
 .invoice-row .left{flex:1;display:flex;align-items:center;gap:8px;}
@@ -90,6 +96,8 @@ if ('serviceWorker' in navigator) {
   <div style="text-align:left;">
     <h2>
       <div class="title-wrapper">
+        <!-- tambahkan logo di bubble bersama tulisan BIAYA DESAIN -->
+        <img src="Logo PNG.png" alt="Logo" class="title-logo" />
         <span class="title-small">Estimasi</span>
         <span class="title-big">BIAYA DESAIN</span>
       </div>
@@ -147,9 +155,11 @@ if ('serviceWorker' in navigator) {
     </div>
   </div>
 
+  <!-- tambahkan placeholder logo di #hasil, namun karena JS menulis ulang innerHTML, kita akan menyisipkan logo melalui string pesan pada fungsi hitung -->
   <div id="hasil"></div>
 
   <div id="invoice">
+    <!-- logo invoice akan disisipkan via JS ketika invoice dibuat (agar tidak hilang saat innerHTML diubah) -->
     <div class="invoice-controls">
       <h3 id="invoiceTitle">INVOICE</h3>
       <div>
@@ -171,7 +181,7 @@ if ('serviceWorker' in navigator) {
 <script>
 /* ---------------------------
    Semua fungsi UI & logic Anda (tetap utuh).
-   Saya hanya menambahkan keterangan metode pembayaran.
+   Saya hanya menambahkan keterangan metode pembayaran dan menyisipkan logo pada hasil & invoice.
    --------------------------- */
 
 /* ----- Data & UI wiring (sama) ----- */
@@ -258,7 +268,7 @@ projectNameInput.addEventListener('input', updateProjectPreview);
 projectCodeInput.addEventListener('input', updateProjectPreview);
 updateProjectPreview();
 
-/* main calculation + render invoice (sama, hanya tambahan keterangan di metode pembayaran) */
+/* main calculation + render invoice (sama, hanya tambahan keterangan di metode pembayaran dan sisip logo) */
 function hitung(){
   if(!selectedJasa){ document.getElementById("hasil").innerText="Pilih jasa terlebih dahulu."; return; }
 
@@ -274,7 +284,9 @@ function hitung(){
   invoiceState.total = totalAkhir;
   lunasAlerted = false;
 
-  let pesan=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>📑 Penawaran Jasa: ${selectedJasa.nama}</div>`;
+  // sisipkan logo di kiri atas hasil
+  let pesan=`<img src="Logo PNG.png" class="hasil-logo" alt="Logo"/>`;
+  pesan+=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>📑 Penawaran Jasa: ${selectedJasa.nama}</div>`;
   pesan+=`Harga satuan: Rp ${selectedJasa.harga.toLocaleString()} / ${selectedJasa.satuan}<br>`;
   pesan+=`Jumlah: ${luasan} ${selectedJasa.satuan}<br>`;
   pesan+=`Diskon: ${diskon}%${diskon>0?` <span class="diskon-rp">💰 Rp ${potongan.toLocaleString()}</span>`:''}<br>`;
@@ -337,7 +349,10 @@ function hitung(){
   customCounter = 0;
 
   document.getElementById('invoiceTitle').innerText = `INVOICE Jasa Desain : ${selectedJasa.nama}`;
+
+  // sisipkan logo di kiri atas invoice (agar tetap ada meskipun isi diubah)
   invoiceContent.innerHTML = `
+    <img src="Logo PNG.png" class="invoice-logo" alt="Logo" />
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
       <div>
         <div style="font-weight:700;">${projectNameInput.value || '-'}</div>
@@ -386,8 +401,6 @@ function hitung(){
 }
 
 /* remaining helper functions unchanged (renderTermRowHTML, addCustomTerm, etc.) */
-/* ... (sama seperti file Anda sebelumnya; pastikan menyalin fungsi-fungsi tersebut jika Anda menggabungkan) */
-
 function renderTermRowHTML(key,label,nominal,isDefault=false){
   const safeNom = Number(nominal || 0).toLocaleString();
   const dateId = `date_${key}`;
