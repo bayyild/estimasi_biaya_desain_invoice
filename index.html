@@ -286,7 +286,7 @@ function hitung(){
 
   // sisipkan logo di kiri atas hasil
   let pesan=`<img src="Logo PNG.png" class="hasil-logo" alt="Logo"/>`;
-  pesan+=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>📑 Penawaran Jasa: ${selectedJasa.nama}</div>`;
+  pesan+=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>Penawaran Jasa: ${selectedJasa.nama}</div>`;
   pesan+=`Harga satuan: Rp ${selectedJasa.harga.toLocaleString()} / ${selectedJasa.satuan}<br>`;
   pesan+=`Jumlah: ${luasan} ${selectedJasa.satuan}<br>`;
   pesan+=`Diskon: ${diskon}%${diskon>0?` <span class="diskon-rp">💰 Rp ${potongan.toLocaleString()}</span>`:''}<br>`;
@@ -805,3 +805,4 @@ async function downloadPDF(){
 </script>
 </body>
 </html>
+
