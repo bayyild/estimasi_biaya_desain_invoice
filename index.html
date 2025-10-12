@@ -193,7 +193,8 @@ const jasaList=[
   { nama:"Paket Rumah Luas 60-120", harga:11000000, satuan:"paket", produk:["Produk Prarencana + Keperluan IMB"] },
   { nama:"Paket Rumah Luas 121-240", harga:21000000, satuan:"paket", produk:["Produk Prarencana + Keperluan IMB"] },
   { nama:"Paket Rumah Luas 241-300", harga:30000000, satuan:"paket", produk:["Produk Prarencana + Keperluan IMB"] },
-  { nama:"Kelengkapan Gambar", harga:1700000, satuan:"paket", produk:[] }
+  { nama:"Kelengkapan Gambar", harga:1700000, satuan:"paket", produk:[] },
+  { nama:"3d Modeling & Render", harga:3250000, satuan:"paket", produk:[] }
 ];
 
 let selectedJasa=null;
@@ -214,7 +215,7 @@ function selectJasa(index,btn){
 
   const uraianDiv=document.getElementById("uraianDisplay");
   const manualInput=document.getElementById("manualInput");
-  if(selectedJasa.nama==="Kelengkapan Gambar"){
+  if(selectedJasa.nama==="Kelengkapan Gambar" || selectedJasa.nama==="3d Modeling & Render"){
     uraianDiv.innerHTML="";
     manualInput.style.display="block";
     document.getElementById("fieldsContainer").innerHTML="";
