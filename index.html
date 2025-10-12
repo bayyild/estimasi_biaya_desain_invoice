@@ -20,17 +20,17 @@ body { font-family:'Poppins',sans-serif; margin:20px; background:#FECB10; color:
 .header-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;}
 h2{margin:0;}
 .title-wrapper { display:flex; align-items:center; border-radius:10px; overflow:hidden; box-shadow:0 3px 10px rgba(0,0,0,0.25); }
-.title-small { display:block; font-size:16px; font-weight:500; color:#fff; background:#333; padding:4px 12px 2px; text-align:center; }
-.title-big { display:block; font-size:26px; font-weight:700; color:#333; background:#fff; padding:4px 14px 8px; text-align:center; letter-spacing:1px; }
-.title-logo{ width:44px; height:44px; object-fit:contain; margin:6px 8px 6px 10px; }
+.title-small { display:block; font-size:16px; font-weight:600; color:#444; background:#fff; padding:6px 12px 4px; text-align:center; }
+.title-big { display:block; font-size:26px; font-weight:700; color:#444; background:#fff; padding:6px 14px 10px; text-align:center; letter-spacing:1px; }
+.title-logo{ width:64px; height:64px; object-fit:contain; margin:6px 10px 6px 10px; }
 .project-inputs{min-width:260px;}
 .project-inputs label{display:block;font-size:13px;color:#222;margin-bottom:4px;}
 .project-inputs input{margin-bottom:8px;}
 .grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; margin-bottom:20px; }
 /* Button jasa desain: putih dengan border abu tua, teks bold */
-.service-btn{ padding:16px; border:2px solid #444; border-radius:12px; background:#fff; color:#333; cursor:pointer; text-align:center; font-size:15px; font-weight:700; transition:all .3s ease; box-shadow:0 2px 6px rgba(0,0,0,.04); }
+.service-btn{ padding:16px; border:none; border-radius:12px; background:#fff; color:#333; cursor:pointer; text-align:center; font-size:15px; font-weight:700; transition:all .3s ease; box-shadow:0 6px 18px rgba(0,0,0,.08); }
 .service-btn:hover{background:#f6f6f6;}
-.service-btn.active{background:#333;color:#fff;font-weight:700;border:2px solid #333;}
+.service-btn.active{background:#333;color:#fff;font-weight:700;border:none;box-shadow:0 8px 24px rgba(0,0,0,.12);} 
 input[type="text"], input[type="number"], input[type="date"]{padding:10px;margin-top:6px;border-radius:8px;border:1px solid #333;font-size:14px;width:100%;box-sizing:border-box;}
 button{background:#FECB10;color:#333;border:2px solid #fff;border-radius:8px;padding:10px 18px;cursor:pointer;font-size:14px;font-weight:600;transition:all .3s ease;}
 button:hover{background:#fff;color:#333;}
@@ -46,7 +46,7 @@ button:hover{background:#fff;color:#333;}
 #projectPreview .right{text-align:right;font-size:14px;color:#333;min-width:220px;}
 /* Hasil (bubble hasil) - siapkan posisi relative agar logo bisa diletakkan di kiri atas */
 #hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;position:relative;}
-.hasil-logo{position:absolute;left:12px;top:12px;width:40px;height:40px;object-fit:contain;}
+.hasil-logo{display:block;position:relative;margin:0 auto 12px;width:80px;height:80px;object-fit:contain;} 
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .diskon-rp{color:#333;font-weight:600;margin-left:6px;}
 .rekomendasi{margin-top:15px;padding:14px;border:2px solid #333;background:#fff;font-weight:600;font-size:15px;border-radius:8px;color:#333;}
@@ -55,7 +55,7 @@ button:hover{background:#fff;color:#333;}
 .judul-uraian{font-size:18px;font-weight:600;margin-top:18px;padding:8px;background:#FECB10;color:#333;border-left:5px solid #333;border-radius:6px;}
 .uraian-list{font-size:15px;margin-top:10px;padding-left:20px;color:#333;}
 #invoice{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#ffffff;border:2px solid #000; box-shadow:0 6px 18px rgba(0,0,0,0.06);position:relative;}
-.invoice-logo{position:absolute;left:12px;top:12px;width:40px;height:40px;object-fit:contain;}
+.invoice-logo{display:block;position:relative;margin:0 auto 12px;width:80px;height:80px;object-fit:contain;} 
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .invoice-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
 .invoice-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
@@ -286,7 +286,7 @@ function hitung(){
 
   // sisipkan logo di kiri atas hasil
   let pesan=`<img src="Logo PNG.png" class="hasil-logo" alt="Logo"/>`;
-  pesan+=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>Penawaran Jasa: ${selectedJasa.nama}</div>`;
+  pesan+=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>📑 Penawaran Jasa: ${selectedJasa.nama}</div>`;
   pesan+=`Harga satuan: Rp ${selectedJasa.harga.toLocaleString()} / ${selectedJasa.satuan}<br>`;
   pesan+=`Jumlah: ${luasan} ${selectedJasa.satuan}<br>`;
   pesan+=`Diskon: ${diskon}%${diskon>0?` <span class="diskon-rp">💰 Rp ${potongan.toLocaleString()}</span>`:''}<br>`;
@@ -805,4 +805,3 @@ async function downloadPDF(){
 </script>
 </body>
 </html>
-
