@@ -40,12 +40,12 @@ button:hover{background:#fff;color:#333;}
 .remove-btn:hover{background:#fdd;}
 .cta-btn{margin-top:18px;width:100%;font-size:18px;font-weight:700;padding:14px 20px;background:#333;color:#fff;border:none;border-radius:10px;cursor:pointer;transition:all .3s ease;}
 .cta-btn:hover{background:#222;transform:translateY(-2px);}
-#outputWrapper{margin-top:20px;padding:8px;border-radius:10px;background:transparent;}
+#outputWrapper{margin-top:20px;padding:8px;border-radius:10px;background:transparent;position:relative;} 
 #projectPreview{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
 #projectPreview .left{font-weight:700;}
 #projectPreview .right{text-align:right;font-size:14px;color:#333;min-width:220px;}
 /* Hasil (bubble hasil) - siapkan posisi relative agar logo bisa diletakkan di kiri atas */
-#hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;position:relative;}
+#hasil{margin-top:12px;padding:20px;border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.05);font-size:15px;color:#333;position:relative;} .hasil-logo{display:none;} .hasil-logo-outside{position:absolute;right:12px;top:-60px;width:80px;height:80px;object-fit:contain;} 
 .hasil-logo{position:absolute;right:12px;top:12px;width:80px;height:80px;object-fit:contain;}  
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
 .diskon-rp{color:#333;font-weight:600;margin-left:6px;}
@@ -55,9 +55,9 @@ button:hover{background:#fff;color:#333;}
 .judul-uraian{font-size:18px;font-weight:600;margin-top:18px;padding:8px;background:#FECB10;color:#333;border-left:5px solid #333;border-radius:6px;}
 .uraian-list{font-size:15px;margin-top:10px;padding-left:20px;color:#333;}
 #invoice{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#ffffff;border:2px solid #000; box-shadow:0 6px 18px rgba(0,0,0,0.06);position:relative;}
-.invoice-logo{position:absolute;left:12px;top:12px;width:80px;height:80px;object-fit:contain;}  
+.invoice-logo{position:absolute;left:12px;top:12px;width:72px;height:72px;object-fit:contain;}   
 .total{font-size:22px;font-weight:700;color:#333;margin-top:12px;}
-.invoice-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;}
+.invoice-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px;padding-left:96px;}
 .invoice-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
 .invoice-row .left{flex:1;display:flex;align-items:center;gap:8px;}
 .invoice-row .left .label{font-weight:600;}
@@ -96,10 +96,10 @@ if ('serviceWorker' in navigator) {
   <div style="text-align:left;">
     <h2>
       <div class="title-wrapper">
-        <!-- logo di atas, estimasi, lalu biaya desain (stack vertikal) -->
-        <img src="Logo PNG.png" alt="Logo" class="title-logo" />
+        <!-- urutan: ESTIMASI, BIAYA DESAIN, lalu logo -->
         <span class="title-small">Estimasi</span>
         <span class="title-big">BIAYA DESAIN</span>
+        <img src="Logo PNG.png" alt="Logo" class="title-logo" />
       </div>
     </h2>
   </div>
@@ -144,6 +144,7 @@ if ('serviceWorker' in navigator) {
 <button class="cta-btn" onclick="hitung()">⚡ Hitung Estimasi</button>
 
 <div id="outputWrapper">
+  <img src="Logo PNG.png" class="hasil-logo-outside" alt="Logo" />
   <div id="projectPreview">
     <div class="left">
       <div id="previewTitle" style="font-size:16px;font-weight:700;">Penawaran</div>
