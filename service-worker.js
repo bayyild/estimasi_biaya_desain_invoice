@@ -1,15 +1,16 @@
-// service-worker.js
 const CACHE_NAME = "desain-cache-v1";
+const BASE_PATH = "/estimasi_biaya_desain_invoice/";
+
 const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  BASE_PATH,
+  BASE_PATH + "index.html",
+  BASE_PATH + "manifest.json",
+  BASE_PATH + "icons/icon-192.png",
+  BASE_PATH + "icons/icon-512.png"
 ];
 
 self.addEventListener("install", event => {
-  console.log("Service Worker: Installing & caching files...");
+  console.log("SW installing...");
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
@@ -17,7 +18,7 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-  console.log("Service Worker: Activated");
+  console.log("SW activated");
   event.waitUntil(self.clients.claim());
 });
 
@@ -31,7 +32,7 @@ self.addEventListener("fetch", event => {
             event.request.mode === "navigate" ||
             event.request.headers.get("accept")?.includes("text/html")
           ) {
-            return caches.match("./index.html");
+            return caches.match(BASE_PATH + "index.html");
           }
         })
       );
