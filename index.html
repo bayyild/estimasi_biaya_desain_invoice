@@ -294,17 +294,26 @@ function hitung(){
   pesan+=`Redeem Code: Rp ${redeem.toLocaleString()}<br>`;
   pesan+=`<hr><div class="total">Total Estimasi: Rp <span id="totalCount">0</span></div>`;
 
-  if(selectedJasa.nama==="Kelengkapan Gambar"){
-    const fields=document.querySelectorAll("#fieldsContainer input");
-    const list=[...fields].map(f=>f.value.trim()).filter(v=>v);
-    if(list.length>0){
-      pesan+="<div class='judul-uraian'>Uraian Pekerjaan:</div>";
-      pesan+="<ul class='uraian-list'>"+list.map(p=>`<li>${p}</li>`).join("")+"</ul>";
+if(
+    selectedJasa.nama === "Kelengkapan Gambar" ||
+    selectedJasa.nama === "3d Modeling & Render"
+){
+    const fields = document.querySelectorAll("#fieldsContainer input");
+    const list = [...fields].map(f => f.value.trim()).filter(v => v);
+
+    if(list.length > 0){
+        pesan += "<div class='judul-uraian'>Uraian Pekerjaan:</div>";
+        pesan += "<ul class='uraian-list'>" +
+                 list.map(p => `<li>${p}</li>`).join("") +
+                 "</ul>";
     }
-  } else if(selectedJasa.produk.length>0){
-    pesan+="<div class='judul-uraian'>Uraian Pekerjaan:</div>";
-    pesan+="<ul class='uraian-list'>"+selectedJasa.produk.map(p=>`<li>${p}</li>`).join("")+"</ul>";
-  }
+}
+else if(selectedJasa.produk.length > 0){
+    pesan += "<div class='judul-uraian'>Uraian Pekerjaan:</div>";
+    pesan += "<ul class='uraian-list'>" +
+             selectedJasa.produk.map(p => `<li>${p}</li>`).join("") +
+             "</ul>";
+}
 
   if(selectedJasa.satuan==="m²"){
     if(luasan>0 && luasan<=120) pesan+=`<div class='rekomendasi'>💡 Rekomendasi: Paket Rumah Luas 60-120 (Rp ${jasaList[4].harga.toLocaleString()})</div>`;
@@ -811,3 +820,4 @@ async function downloadPDF(){
 </script>
 </body>
 </html>
+
