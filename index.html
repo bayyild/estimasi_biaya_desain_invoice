@@ -285,6 +285,17 @@ function hitung(){
   invoiceState.total = totalAkhir;
   lunasAlerted = false;
 
+  // === Aturan Baru: Jika total < 6 juta, otomatis DP 50% / T1 30% / T2 20% ===
+  let dpPersen = 0.3;
+  let t1Persen = 0.5;
+  let t2Persen = 0.2;
+
+  if(totalAkhir < 6000000){
+      dpPersen = 0.5;
+      t1Persen = 0.3;
+      t2Persen = 0.2;
+  }
+
   // sisipkan logo di kiri atas hasil
   let pesan=`<img src="Logo PNG.png" class="hasil-logo" alt="Logo"/>`;
   pesan+=`<div style='font-size:18px;font-weight:600;margin-bottom:10px;'>📑 Penawaran Jasa: ${selectedJasa.nama}</div>`;
@@ -323,9 +334,9 @@ else if(selectedJasa.produk.length > 0){
 
   // --- METODE PEMBAYARAN: tampilkan keterangan kecil di bawah setiap termin ---
   pesan+="<h4>Metode Pembayaran:</h4>";
-  pesan+=`<div>DP 30% = Rp ${(totalAkhir*0.3).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika penawaran disetujui.</em></div></div><br>`;
-  pesan+=`<div>Termin 1 (50%) = Rp ${(totalAkhir*0.5).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika layout/fasad disetujui dan lanjut ke 3D.</em></div></div><br>`;
-  pesan+=`<div>Termin 2 (20%) = Rp ${(totalAkhir*0.2).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika 3D disetujui dan lanjut ke kelengkapan gambar / RAB.</em></div></div>`;
+  pesan+=`<div>DP ${dpPersen*100}% = Rp ${(totalAkhir*dpPersen).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika penawaran disetujui.</em></div></div><br>`;
+  pesan+=`<div>Termin 1 (${t1Persen*100}%) = Rp ${(totalAkhir*t1Persen).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika layout/fasad disetujui dan lanjut ke 3D.</em></div></div><br>`;
+  pesan+=`<div>Termin 2 (${t2Persen*100}%) = Rp ${(totalAkhir*t2Persen).toLocaleString()}<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika 3D disetujui dan lanjut ke kelengkapan gambar / RAB.</em></div></div>`;
 
   pesan+=`<div class="rekening-box"><strong>Informasi Pembayaran:</strong><br>BCA 7772046793 a.n. Bayyild Rizqan Syarif<div class="rekening-row"><button onclick="copyRekening()">Copy</button></div></div>`;
 
@@ -350,9 +361,9 @@ else if(selectedJasa.produk.length > 0){
     invoiceControls.insertAdjacentHTML('afterbegin', '<img src="Logo PNG.png" class="invoice-logo" alt="Logo" />');
   }
 
-  const dpNom = Math.round(totalAkhir * 0.3);
-  const term1Nom = Math.round(totalAkhir * 0.5);
-  const term2Nom = Math.round(totalAkhir * 0.2);
+  const dpNom = Math.round(totalAkhir * dpPersen);
+  const term1Nom = Math.round(totalAkhir * t1Persen);
+  const term2Nom = Math.round(totalAkhir * t2Persen);
 
   invoiceState = {
     dp:{paid:false,date:''},
@@ -381,9 +392,9 @@ else if(selectedJasa.produk.length > 0){
   `;
 
   // gunakan label yang menyertakan keterangan (HTML kecil) untuk tiap termin
-  const labelDP = `DP 30%<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika penawaran disetujui.</em></div>`;
-  const labelT1 = `Termin 1 (50%)<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika layout/fasad disetujui dan lanjut ke 3D.</em></div>`;
-  const labelT2 = `Termin 2 (20%)<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika 3D disetujui dan lanjut ke kelengkapan gambar / RAB.</em></div>`;
+  const labelDP = `DP ${dpPersen*100}%<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika penawaran disetujui.</em></div>`;
+  const labelT1 = `Termin 1 (${t1Persen*100}%)<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika layout/fasad disetujui dan lanjut ke 3D.</em></div>`;
+  const labelT2 = `Termin 2 (${t2Persen*100}%)<div style="font-size:12px;color:#666;margin-top:4px;"><em>*Ketika 3D disetujui dan lanjut ke kelengkapan gambar / RAB.</em></div>`;
 
   invoiceContent.innerHTML += renderTermRowHTML('dp', labelDP, dpNom, true);
   invoiceContent.innerHTML += renderTermRowHTML('t1', labelT1, term1Nom, true);
@@ -820,4 +831,3 @@ async function downloadPDF(){
 </script>
 </body>
 </html>
-
